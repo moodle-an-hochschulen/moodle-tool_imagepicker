@@ -1,0 +1,22 @@
+name: Moodle Plugin CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      moodle-core-branch:
+        description: 'Moodle core branch to test against (if not provided, the branch will be auto-detected)'
+        required: false
+        type: string
+  repository_dispatch:
+    types: [moodle-plugin-ci]
+
+jobs:
+  moodle-plugin-ci:
+    uses: moodle-an-hochschulen/moodle-workflows/.github/workflows/moodle-plugin-ci.yml@main
+    with:
+      moodle-core-branch: ${{ inputs.moodle-core-branch || github.event.client_payload.moodle-core-branch }}
+      # Cropper.js is bundled as a third-party AMD module (see thirdpartylibs.xml) and is therefore excluded from ESLint.
+      # ESLint reports one warning for such an explicitly linted but ignored file, which is tolerated here.
+      grunt-max-lint-warnings: 1

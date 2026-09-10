@@ -1,0 +1,99 @@
+/* Image picker - crop button. */
+
+/* Cropping only makes sense once an image has been added, so the button is hidden while the file manager holds no file. The
+ * core file manager maintains the 'fm-nofiles' class on its container from its file count (see check_buttons() in
+ * lib/form/filemanager.js), which it re-evaluates after every upload and every deletion. This is the same state driven
+ * approach with which core hides the 'Add' button once the maximum number of files is reached ('fm-maxfiles').
+ *
+ * Note that this deliberately keys on 'fm-nofiles' and not on 'fm-noitems': the latter describes the currently displayed
+ * folder rather than the element as a whole and is not even set in all view modes.
+ *
+ * The button is hidden while the file manager is still loading as well: our button is injected into the server rendered
+ * toolbar right away, but 'fm-nofiles' is only set once the file list has arrived, so without this the button would briefly
+ * flash up on page load. */
+.filemanager.fm-loading .tool-imagepicker-btn-crop,
+.filemanager.fm-nofiles .tool-imagepicker-btn-crop {
+    display: none;
+}
+
+/* The button hides itself as well while the field holds a file which cannot be cropped (because it is not an image) or whose
+ * cropped result could not be stored (because its file type is not accepted by the form element). This class is maintained by
+ * the JavaScript, which is the only place where the file which is currently in the field is known. */
+.filemanager .tool-imagepicker-btn-crop.tool-imagepicker-btn-unavailable {
+    display: none;
+}
+
+
+/* Image picker - crop modal. */
+
+/* The crop modal is created as a "large" core modal (which is 800px wide at most). For cropping we want as much room as
+ * possible, so we make it (almost) fill the viewport in both dimensions. The modal is laid out as a flex column so the
+ * header and footer keep their natural size and the body takes up the remaining space; the cropper canvas is then sized
+ * by the JavaScript to fit into that body area (preserving the image aspect ratio), so the image is scaled down instead
+ * of causing scroll bars. */
+.tool-imagepicker-crop-modal .modal-dialog {
+    width: 96vw;
+    max-width: 96vw;
+    height: 94vh;
+    max-height: 94vh;
+    margin: 3vh auto;
+}
+.tool-imagepicker-crop-modal .modal-content {
+    height: 100%;
+    max-height: 100%;
+}
+
+/* Let the body shrink to the space which the modal leaves for it (rather than pushing the footer out). It is laid out as a
+ * flex column, so that the notice about a changing file format (which is only shown for some images) takes the room it
+ * needs and the cropper gets all the rest. The canvas is sized to fit inside, so the body normally never overflows - but
+ * once the modal is so small that not even the minimum size of the cropper fits any more (see below), the body scrolls
+ * rather than letting the cropper overflow into the notices around it. */
+.tool-imagepicker-crop-modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+/* Note that this has no 'min-height: 0': its automatic minimum height (the notices plus the minimum height of the cropper
+ * container) is exactly what has to overflow the body when the modal is too small, so that the body gets its scroll bar. */
+.tool-imagepicker-crop-modal .tool-imagepicker-cropper-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Fill the remaining space and center the (fitted) cropper canvas both horizontally and vertically.
+ *
+ * The container never gets smaller than 100px, the height below which cropping stops being usable. The JavaScript sizes the
+ * canvas from the container, so this is the minimum height of the canvas as well. The 'height: 0' is what keeps the
+ * container's size independent of the canvas inside it: if the container took its minimum size from its content in turn,
+ * the canvas could never shrink again once it has grown. With a height of its own, the container contributes only its
+ * minimum height to the layout, and the flex growth fills it up. */
+.tool-imagepicker-crop-modal .tool-imagepicker-cropper-container {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    height: 0;
+    min-height: 100px;
+    width: 100%;
+}
+
+/* While the image is being fetched and prepared, the container shows a (Bootstrap) spinner in its place. The spinner is
+ * scaled up, as its default size would be lost in a container of this size. */
+.tool-imagepicker-crop-modal .tool-imagepicker-loading .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* The cropper canvas brings a minimum size of its own (200 x 100 px, see the styles of cropper-canvas in cropper.js), which
+ * is meant to keep it from collapsing where nothing else sizes it. Here the JavaScript sizes it to the aspect ratio of the
+ * image, so that minimum only ever gets in the way: with the modal at its smallest, a canvas which is forced wider than the
+ * image shows its (chequered) background next to the image. */
+/* stylelint-disable-next-line selector-type-no-unknown */
+.tool-imagepicker-crop-modal .tool-imagepicker-cropper-container cropper-canvas {
+    min-width: 0;
+    min-height: 0;
+}

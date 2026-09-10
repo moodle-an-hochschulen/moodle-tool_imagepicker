@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>amd/src/cropper.js</location>
+        <name>Cropper.js</name>
+        <description>JavaScript image cropper based on web components.</description>
+        <version>2.1.1</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+</libraries>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="admin/tool/imagepicker/db" VERSION="2026072000" COMMENT="Database schema for tool_imagepicker."
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="tool_imagepicker_original" COMMENT="Preserved original images which back the cropped images of image picker fields.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="contextid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The context id where the original file is stored. This is always the context of the file area which the image backed by this original lives in."/>
+        <FIELD NAME="component" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="The component of the file area which the image backed by this original lives in. This is the draft area (user/draft) as long as the image has not been saved anywhere yet."/>
+        <FIELD NAME="filearea" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" COMMENT="The file area which the image backed by this original lives in. This is the draft area (user/draft) as long as the image has not been saved anywhere yet."/>
+        <FIELD NAME="itemid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The item id of the file area which the image backed by this original lives in. This is the draft item id as long as the image has not been saved anywhere yet."/>
+        <FIELD NAME="derivedhash" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false" COMMENT="The content hash of the currently displayed (cropped) file which this original backs."/>
+        <FIELD NAME="cropx" TYPE="number" LENGTH="10" DECIMALS="9" NOTNULL="false" SEQUENCE="false" COMMENT="The x position of the last crop region, as a fraction (0..1) of the original image width."/>
+        <FIELD NAME="cropy" TYPE="number" LENGTH="10" DECIMALS="9" NOTNULL="false" SEQUENCE="false" COMMENT="The y position of the last crop region, as a fraction (0..1) of the original image height."/>
+        <FIELD NAME="cropwidth" TYPE="number" LENGTH="10" DECIMALS="9" NOTNULL="false" SEQUENCE="false" COMMENT="The width of the last crop region, as a fraction (0..1) of the original image width."/>
+        <FIELD NAME="cropheight" TYPE="number" LENGTH="10" DECIMALS="9" NOTNULL="false" SEQUENCE="false" COMMENT="The height of the last crop region, as a fraction (0..1) of the original image height."/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="derivedhash" UNIQUE="false" FIELDS="derivedhash"/>
+        <INDEX NAME="contextid" UNIQUE="false" FIELDS="contextid"/>
+        <INDEX NAME="place" UNIQUE="false" FIELDS="contextid, component, filearea, itemid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
