@@ -1,7 +1,7 @@
 moodle-tool_imagepicker
 =======================
 
-[![Moodle Plugin CI](https://github.com/moodle-an-hochschulen/moodle-tool_imagepicker/actions/workflows/moodle-plugin-ci.yml/badge.svg?branch=main)](https://github.com/moodle-an-hochschulen/moodle-tool_imagepicker/actions?query=workflow%3A%22Moodle+Plugin+CI%22+branch%3Amain)
+[![Moodle Plugin CI](https://github.com/moodle-an-hochschulen/moodle-tool_imagepicker/actions/workflows/moodle-plugin-ci.yml/badge.svg?branch=MOODLE_500_STABLE)](https://github.com/moodle-an-hochschulen/moodle-tool_imagepicker/actions?query=workflow%3A%22Moodle+Plugin+CI%22+branch%3AMOODLE_500_STABLE)
 
 Moodle plugin which enhances the Moodle filepicker with a cropping functionality for uploaded images.
 
